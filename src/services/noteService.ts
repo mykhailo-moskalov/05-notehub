@@ -10,6 +10,7 @@ interface Options {
   params: {
     search: string;
     page: number;
+    perPage: number;
   };
   headers: {
     Authorization: string;
@@ -27,6 +28,7 @@ export const fetchNotes = async (
     params: {
       search: search,
       page: page,
+      perPage: 12,
     },
     headers: {
       Authorization: `Bearer ${NOTEHUB_TOKEN}`,
@@ -43,19 +45,23 @@ export const createNote = async ({
   content,
   tag,
 }: Note): Promise<Note> => {
-  const newNote = {
-    title: title,
-    content: content,
-    tag: tag,
-  };
+  const newNote = { title, content, tag };
 
-  await axios.post("/notes", newNote);
+  const resp = await axios.post<Note>("/notes", newNote, {
+    headers: {
+      Authorization: `Bearer ${NOTEHUB_TOKEN}`,
+    },
+  });
 
-  return newNote;
+  return resp.data;
 };
 
-export const deleteNote = async ({ id }: Note): Promise<void> => {
-  await axios.delete(`/notes/${id}`);
+export async function deleteNote(id: string): Promise<void> {
+  await axios.delete(`/notes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${NOTEHUB_TOKEN}`,
+    },
+  });
 
   return;
-};
+}

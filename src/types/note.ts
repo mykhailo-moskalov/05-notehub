@@ -7,10 +7,10 @@ export interface Note {
   tag?: NoteTag;
 }
 
-enum NoteTag {
-  Work,
-  Personal,
-  Meeting,
-  Shopping,
-  Todo,
+export enum NoteTag {
+  Work = "Work",
+  Personal = "Personal",
+  Meeting = "Meeting",
+  Shopping = "Shopping",
+  Todo = "Todo",
 }
