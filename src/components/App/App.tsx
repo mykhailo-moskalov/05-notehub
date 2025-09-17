@@ -55,9 +55,10 @@ export default function App() {
         <header className={css.toolbar}>
           <SearchBox
             defValue={query}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setQuery(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
           />
 
           {isSuccess && totalPages > 1 && (
