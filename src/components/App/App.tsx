@@ -77,17 +77,7 @@ export default function App() {
           <RingLoader size="100px" color="#0d6efd" className={css.loader} />
         )}
         {data !== undefined && data?.notes.length > 0 && (
-          <NoteList
-            notes={data?.notes}
-            onDelete={(id) => {
-              deleteNote(id)
-                .then(() => {
-                  toast.success("Note deleted!");
-                  queryClient.invalidateQueries({ queryKey: ["notes"] });
-                })
-                .catch(() => toast.error("Failed to delete note."));
-            }}
-          />
+          <NoteList notes={data.notes} />
         )}
         {isModalOpen && (
           <Modal onClose={closeModal}>
