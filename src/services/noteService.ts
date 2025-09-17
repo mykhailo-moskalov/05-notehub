@@ -1,4 +1,4 @@
-import type { Note } from "../types/note";
+import type { Note, NoteFormValues } from "../types/note";
 import axios from "axios";
 
 interface NotesHTTPResponse {
@@ -44,10 +44,10 @@ export const createNote = async ({
   title,
   content,
   tag,
-}: Note): Promise<Note> => {
+}: NoteFormValues): Promise<NoteFormValues> => {
   const newNote = { title, content, tag };
 
-  const resp = await axios.post<Note>("/notes", newNote, {
+  const resp = await axios.post<NoteFormValues>("/notes", newNote, {
     headers: {
       Authorization: `Bearer ${NOTEHUB_TOKEN}`,
     },
@@ -56,12 +56,12 @@ export const createNote = async ({
   return resp.data;
 };
 
-export async function deleteNote(id: string): Promise<void> {
-  await axios.delete(`/notes/${id}`, {
+export async function deleteNote(id: string): Promise<Note> {
+  const resp = await axios.delete<Note>(`/notes/${id}`, {
     headers: {
       Authorization: `Bearer ${NOTEHUB_TOKEN}`,
     },
   });
 
-  return;
+  return resp.data;
 }

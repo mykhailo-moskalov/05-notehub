@@ -2,18 +2,12 @@ import { Formik, type FormikHelpers, ErrorMessage, Form, Field } from "formik";
 import * as Yup from "yup";
 import css from "./NoteForm.module.css";
 import { createNote } from "../../services/noteService";
-import type { NoteTag } from "../../types/note";
 import toast from "react-hot-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { NoteFormValues } from "../../types/note";
 
 interface NoteFormProps {
   onClose: () => void;
-}
-
-interface NoteFormValues {
-  title: string;
-  content: string;
-  tag: string;
 }
 
 const initialValues: NoteFormValues = {
@@ -36,26 +30,21 @@ const NoteFormSchema = Yup.object().shape({
 export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
 
+  const mutation = useMutation({
+    mutationFn: (note: NoteFormValues) => createNote(note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      toast.success("Note created!");
+      onClose();
+    },
+    onError: () => toast.error("Failed to create note."),
+  });
+
   const handleSubmit = (
     values: NoteFormValues,
     actions: FormikHelpers<NoteFormValues>
   ) => {
-    const note = {
-      ...values,
-      tag: values.tag as NoteTag,
-    };
-
-    createNote(note)
-      .then(() => {
-        toast.success("Note created!");
-        queryClient.invalidateQueries({ queryKey: ["notes"] });
-        actions.resetForm();
-        onClose(); // close modal
-      })
-      .catch(() => {
-        toast.error("Failed to create note.");
-      });
-    actions.resetForm();
+    mutation.mutate(values, { onSuccess: () => actions.resetForm() });
   };
 
   return (
