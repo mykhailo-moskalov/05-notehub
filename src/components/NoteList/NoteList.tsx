@@ -17,7 +17,7 @@ export default function NoteList({ notes }: NoteListProps) {
       toast.success("Note deleted!");
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
-    onError: () => toast.error("Failed to delete note.");
+    onError: () => toast.error("Failed to delete note."),
   });
 
   return (

@@ -2,15 +2,12 @@ import SearchBox from "../SearchBox/SearchBox";
 import { useEffect, useState } from "react";
 import { fetchNotes } from "../../services/noteService";
 import css from "./App.module.css";
-import {
-  keepPreviousData,
-  useQuery,
-} from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import Pagination from "../Pagination/Pagination";
 import NoteList from "../NoteList/NoteList";
 import { RingLoader } from "react-spinners";
-import  { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
 
@@ -69,12 +66,15 @@ export default function App() {
             Create note +
           </button>
         </header>
+
         {isLoading && (
           <RingLoader size="100px" color="#0d6efd" className={css.loader} />
         )}
+
         {data !== undefined && data?.notes.length > 0 && (
           <NoteList notes={data.notes} />
         )}
+
         {isModalOpen && (
           <Modal onClose={closeModal}>
             <NoteForm onClose={closeModal} />
