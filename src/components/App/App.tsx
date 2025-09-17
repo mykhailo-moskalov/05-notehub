@@ -1,24 +1,20 @@
 import SearchBox from "../SearchBox/SearchBox";
 import { useEffect, useState } from "react";
-import { deleteNote, fetchNotes } from "../../services/noteService";
+import { fetchNotes } from "../../services/noteService";
 import css from "./App.module.css";
 import {
   keepPreviousData,
   useQuery,
-  useQueryClient,
 } from "@tanstack/react-query";
 import { useDebounce } from "use-debounce";
 import Pagination from "../Pagination/Pagination";
 import NoteList from "../NoteList/NoteList";
 import { RingLoader } from "react-spinners";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 import Modal from "../Modal/Modal";
 import NoteForm from "../NoteForm/NoteForm";
-// import NoteForm from "../NoteForm/NoteForm";
 
 export default function App() {
-  const queryClient = useQueryClient();
-
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
